@@ -1,0 +1,39 @@
+#
+# deployspec.yml
+#
+
+version: 0.2
+
+env:
+  variables:
+    emma_endpoint:                     https://emma.internal.lib.virginia.edu
+    wait_time:                         300
+    asset_location:                    terraform-infrastructure/emma.lib.virginia.edu/production
+
+phases:
+  install:
+    runtime-versions:
+      golang: 1.12
+    commands:
+      - wget https://releases.hashicorp.com/terraform/0.11.14/terraform_0.11.14_linux_amd64.zip
+      - unzip terraform_0.11.14_linux_amd64.zip
+      - mv terraform /usr/local/bin
+
+  pre_build:
+    commands:
+      - emma_tag=$(cat $CODEBUILD_SRC_DIR/tags/emma.tag | awk '{print $1}')
+      - git clone https://$GITLAB_USER:$GITLAB_TOKEN@gitlab.com/uvalib/terraform-infrastructure.git
+
+  build:
+    commands:
+      - cd $CODEBUILD_SRC_DIR/$asset_location
+      - terraform init
+      - terraform apply -auto-approve -var container_tag=$client_service_tag
+      - sh $CODEBUILD_SRC_DIR/pipeline/wait_for_version.sh $emma_endpoint $emma_tag $wait_time
+
+#  post_build:
+#    commands:
+
+#
+# end of file
+#

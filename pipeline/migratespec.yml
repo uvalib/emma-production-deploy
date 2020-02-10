@@ -1,0 +1,35 @@
+#
+# migratespec.yml
+#
+
+version: 0.2
+
+#env:
+#  variables:
+#    name: value
+
+phases:
+  install:
+    runtime-versions:
+      docker: 18
+      ruby: 2.6
+#    commands:
+#      - printenv
+
+  pre_build:
+    commands:
+      - $(aws ecr get-login --no-include-email --region $AWS_REGION)
+      - emma_tag=$(cat $CODEBUILD_SRC_DIR/tags/emma.tag | awk '{print $1}')
+
+  build:
+    commands:
+      - DOCKER_ENTRY="--entrypoint /emma/scripts/migrate.sh"
+      - DOCKER_ENV="-e DBHOST=$DBHOST -e DBPORT=$DBPORT -e DBNAME=$DBNAME -e DBUSER=$DBUSER -e DBPASSWD=$DBPASSWD"
+      - docker run $DOCKER_ENTRY $DOCKER_ENV $CONTAINER_REGISTRY/$CONTAINER_IMAGE:$emma_tag
+
+#  post_build:
+#    commands:
+
+#
+# end of file
+#
