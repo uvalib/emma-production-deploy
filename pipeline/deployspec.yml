@@ -28,7 +28,7 @@ phases:
     commands:
       - cd $CODEBUILD_SRC_DIR/$asset_location
       - terraform init
-      - terraform apply -auto-approve -var container_tag=$client_service_tag
+      - terraform apply -auto-approve -var container_tag=$emma_tag
       - sh $CODEBUILD_SRC_DIR/pipeline/wait_for_version.sh $emma_endpoint $emma_tag $wait_time
 
 #  post_build:
