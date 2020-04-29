@@ -6,6 +6,7 @@ version: 0.2
 
 env:
   variables:
+    terraform_version:                 0.12.21
     emma_endpoint:                     https://emma.internal.lib.virginia.edu
     wait_time:                         300
     asset_location:                    terraform-infrastructure/emma.lib.virginia.edu/production
@@ -15,8 +16,8 @@ phases:
     runtime-versions:
       golang: 1.12
     commands:
-      - wget https://releases.hashicorp.com/terraform/0.12.21/terraform_0.12.21_linux_amd64.zip
-      - unzip terraform_0.12.21_linux_amd64.zip
+      - wget https://releases.hashicorp.com/terraform/${terraform_version}/terraform_${terraform_version}_linux_amd64.zip
+      - unzip terraform_${terraform_version}_linux_amd64.zip
       - mv terraform /usr/local/bin
 
   pre_build:
