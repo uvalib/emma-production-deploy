@@ -9,7 +9,7 @@ env:
     terraform_version:                 0.12.21
     emma_endpoint:                     https://emma.internal.lib.virginia.edu
     wait_time:                         300
-    asset_location:                    terraform-infrastructure/emma.lib.virginia.edu/production
+    asset_location:                    terraform-infrastructure/emma.lib.virginia.edu/ecs-tasks/production
 
 phases:
   install:
