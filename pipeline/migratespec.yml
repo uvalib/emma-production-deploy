@@ -25,7 +25,9 @@ phases:
     commands:
       - DOCKER_ENTRY="--entrypoint /emma/package/scripts/migrate.sh"
       - DOCKER_ENV="-e DBHOST=$DBHOST -e DBPORT=$DBPORT -e DBNAME=$DBNAME -e DBUSER=$DBUSER -e DBPASSWD=$DBPASSWD"
-      - docker run $DOCKER_ENTRY $DOCKER_ENV $CONTAINER_REGISTRY/$CONTAINER_IMAGE:$emma_tag
+      - DOCKER_IMAGE="$CONTAINER_REGISTRY/$CONTAINER_IMAGE:$emma_tag"
+      - docker pull $DOCKER_IMAGE || docker pull $DOCKER_IMAGE || docker pull $DOCKER_IMAGE
+      - docker run $DOCKER_ENTRY $DOCKER_ENV $DOCKER_IMAGE
 
 #  post_build:
 #    commands:
